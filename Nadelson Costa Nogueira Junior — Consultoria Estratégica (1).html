@@ -1,0 +1,3336 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nadelson Costa Nogueira Junior — Consultoria Estratégica</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Basecoat CSS CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/basecoat.cdn.min.css">
+  
+  <!-- System Shell CSS & JS -->
+  <style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Complements basecoat; artifacts override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: 28px; font-weight: 650; line-height: 1.1; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: #0a8f3c; }
+.kpi .kpi-delta.down { color: #cf3131; }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+</style>
+  
+
+  <style>
+    :root {
+      --accent: #d4af37;
+      --accent-gold: #e6ca65;
+      --accent-glow: rgba(212, 175, 55, 0.25);
+      --bg: #090e17;
+      --surface: #101927;
+      --surface-card: #152235;
+      --surface-elevated: #1a2c45;
+      --border: #223754;
+      --border-gold: rgba(212, 175, 55, 0.35);
+      --text: #f0f4fc;
+      --text-muted: #9ab2d0;
+      --font-serif: 'Cinzel', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, .brand-title {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    /* Header & Navigation */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 74px;
+      z-index: 1000;
+      background: rgba(9, 14, 23, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-mark {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      line-height: 1.15;
+    }
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+    }
+    .brand-tag {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      transition: color 0.2s ease, background-color 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff;
+      background: rgba(212, 175, 55, 0.12);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Container & Typography */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .section-spacing {
+      padding: 5.5rem 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--accent-gold);
+      margin-bottom: 0.75rem;
+      background: rgba(212, 175, 55, 0.1);
+      padding: 0.25rem 0.85rem;
+      border-radius: 50px;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* Buttons */
+    .btn-gold {
+      background: linear-gradient(135deg, #e4c153 0%, #ba8e1e 100%);
+      color: #0b111a;
+      font-weight: 700;
+      padding: 0.85rem 1.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(212, 175, 55, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
+      filter: brightness(1.06);
+    }
+
+    .btn-outline-gold {
+      background: rgba(16, 25, 39, 0.6);
+      color: #f0f4fc;
+      border: 1px solid var(--border-gold);
+      padding: 0.85rem 1.65rem;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-outline-gold:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--accent-gold);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* 1. HERO */
+    .hero-section {
+      min-height: 94vh;
+      display: flex;
+      align-items: center;
+      padding-top: 100px;
+      padding-bottom: 4rem;
+      position: relative;
+      background: radial-gradient(circle at 75% 30%, rgba(26, 44, 69, 0.6) 0%, rgba(9, 14, 23, 1) 70%);
+      overflow: hidden;
+    }
+
+    .hero-glow-1 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+      top: -100px;
+      left: 10%;
+      pointer-events: none;
+    }
+
+    .hero-glow-2 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.09) 0%, transparent 70%);
+      bottom: 0;
+      right: 5%;
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3.5rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(21, 34, 53, 0.8);
+      border: 1px solid var(--border-gold);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .hero-title span {
+      display: block;
+      color: #ffffff;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-role {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: #d1deef;
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
+      font-family: var(--font-sans);
+    }
+
+    .hero-description {
+      font-size: 1.08rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 2.25rem;
+      max-width: 580px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero-image-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .portrait-frame {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    .portrait-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    /* 2. SOBRE */
+    .about-card {
+      background: linear-gradient(145deg, var(--surface-card) 0%, var(--surface) 100%);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3.5rem;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .about-img-box {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+      background: #ffffff;
+      aspect-ratio: 4 / 4.7;
+    }
+
+    .about-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .about-content h3 {
+      font-size: 1.85rem;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+    }
+
+    .about-text {
+      color: #c7d8ee;
+      font-size: 1.04rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .highlight-stat-num {
+      font-family: var(--font-serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+    .highlight-stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 3. LOTAÇÃO ATUAL */
+    .current-post-card {
+      background: linear-gradient(135deg, rgba(21, 34, 53, 0.95) 0%, rgba(13, 22, 35, 0.95) 100%);
+      border: 2px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 2.5rem 3rem;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .current-post-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .current-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .current-badge-active {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.35);
+      padding: 0.35rem 0.9rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 10px #4ade80;
+    }
+
+    .current-role-title {
+      font-size: 1.55rem;
+      margin-bottom: 0.35rem;
+      color: #ffffff;
+    }
+
+    .current-org {
+      font-size: 1.05rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .current-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .meta-tag {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .meta-tag strong {
+      color: #ffffff;
+    }
+
+    .atribuicoes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+    }
+
+    .atribuicao-card {
+      background: rgba(16, 25, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .atribuicao-tag {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .atribuicao-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: #ffffff;
+    }
+
+    .atribuicao-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 4. FORMAÇÃO */
+    .edu-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .edu-stat-box {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .edu-stat-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-gold);
+    }
+
+    .edu-stat-num {
+      font-family: var(--font-serif);
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .edu-stat-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+    .edu-stat-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .edu-sections-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .edu-block {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.25rem;
+    }
+
+    .edu-block-title {
+      font-size: 1.35rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+
+    .edu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .edu-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .edu-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .edu-item-body h5 {
+      font-size: 0.98rem;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .edu-item-body p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .badge-in-progress {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: var(--accent-gold);
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* 5. ÁREAS DE CONSULTORIA */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem 1.6rem;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .service-card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .service-card:hover::after {
+      opacity: 1;
+    }
+
+    .service-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.35rem;
+      color: var(--accent-gold);
+    }
+
+    .service-card h4 {
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+      color: #ffffff;
+    }
+
+    .service-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* PÚBLICOS ATENDIDOS */
+    .publicos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .publico-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .publico-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    .publico-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .publico-icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+    }
+
+    .publico-title-wrap h3 {
+      font-size: 1.35rem;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .publico-title-wrap .publico-scope {
+      font-size: 0.86rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .publico-base-box {
+      background: rgba(16, 25, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.84rem;
+      color: #cbdcf2;
+      line-height: 1.5;
+      margin-bottom: 1.75rem;
+    }
+
+    .publico-base-box strong {
+      color: #ffffff;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--accent-gold);
+    }
+
+    .publico-subdivisions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: auto;
+    }
+
+    .publico-subcol {
+      background: rgba(9, 14, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 1.25rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .publico-subcol-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .subcol-estrat .publico-subcol-title {
+      color: #38bdf8;
+    }
+
+    .subcol-acons .publico-subcol-title {
+      color: var(--accent-gold);
+    }
+
+    .publico-subcol-title svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .publico-items-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.83rem;
+      color: #cbd9eb;
+      line-height: 1.45;
+    }
+
+    .publico-items-list li {
+      position: relative;
+      padding-left: 1.1rem;
+    }
+
+    .publico-items-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.45rem;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .subcol-estrat .publico-items-list li::before {
+      background: #38bdf8;
+    }
+
+    .subcol-acons .publico-items-list li::before {
+      background: var(--accent-gold);
+    }
+
+    .publicos-callout-card {
+      background: linear-gradient(135deg, rgba(21, 34, 53, 0.95) 0%, rgba(13, 22, 35, 0.95) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .publicos-callout-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+    }
+
+    .publicos-callout-text {
+      font-size: 0.96rem;
+      color: #d8e5f5;
+      line-height: 1.6;
+    }
+
+    .publicos-callout-text strong {
+      color: #ffffff;
+    }
+
+    /* 6. TRAJETÓRIA (TIMELINE) */
+    .timeline-wrap {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+
+    .timeline-wrap::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 28px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-gold) 0%, var(--border) 100%);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 70px;
+      margin-bottom: 3rem;
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 19px;
+      top: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface-card);
+      border: 3px solid var(--accent-gold);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    .timeline-item.is-current .timeline-dot {
+      background: #22c55e;
+      border-color: #ffffff;
+      box-shadow: 0 0 14px #22c55e;
+    }
+
+    .timeline-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.85rem 2rem;
+      transition: border-color 0.2s ease;
+    }
+    .timeline-card:hover {
+      border-color: var(--border-gold);
+    }
+
+    .timeline-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .timeline-period {
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .timeline-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      color: #ffffff;
+    }
+
+    .timeline-institution {
+      font-size: 0.92rem;
+      color: #9cb4d2;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: #c7d8ee;
+      line-height: 1.65;
+    }
+
+    /* 7. PROJETOS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+
+    .project-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-badge {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.75rem;
+      border-radius: 4px;
+      background: rgba(212, 175, 55, 0.14);
+      color: var(--accent-gold);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      margin-bottom: 1.25rem;
+    }
+
+    .project-card h4 {
+      font-size: 1.25rem;
+      line-height: 1.35;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    .project-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      flex-grow: 1;
+    }
+
+    .project-footer {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: #8da5c3;
+    }
+
+    /* 8. HONRARIAS */
+    .honors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.35rem;
+    }
+
+    .honor-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.6rem 1.5rem;
+      display: flex;
+      gap: 1.15rem;
+      align-items: flex-start;
+      transition: all 0.2s ease;
+    }
+    .honor-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-3px);
+    }
+
+    .honor-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent-gold);
+    }
+
+    .honor-date {
+      font-size: 0.76rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .honor-title {
+      font-size: 0.98rem;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      line-height: 1.35;
+    }
+
+    .honor-org {
+      font-size: 0.83rem;
+      color: #a4bedc;
+      line-height: 1.45;
+    }
+
+    /* 9. CERTIFICAÇÕES ENAP */
+    .enap-stats-banner {
+      background: linear-gradient(135deg, #132034 0%, #1a2c47 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 2.25rem 3rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .enap-stat-item {
+      text-align: center;
+    }
+    .enap-stat-value {
+      font-family: var(--font-serif);
+      font-size: 2.85rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      line-height: 1.1;
+    }
+    .enap-stat-label {
+      font-size: 0.95rem;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .enap-stat-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .enap-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .enap-filter-btn {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .enap-filter-btn:hover, .enap-filter-btn.active {
+      background: var(--accent-gold);
+      color: #0b111a;
+      border-color: var(--accent-gold);
+    }
+
+    .enap-search-box {
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+    .enap-search-input {
+      width: 100%;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: #ffffff;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .enap-search-input:focus {
+      border-color: var(--accent-gold);
+    }
+    .enap-search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .enap-blocks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .enap-block-section {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+    .enap-block-section:hover {
+      border-color: var(--border-gold);
+    }
+
+    .enap-block-header {
+      padding: 1.35rem 2rem;
+      background: rgba(26, 44, 69, 0.4);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .enap-block-header h4 {
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .badge-program {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      color: var(--accent-gold);
+      font-size: 0.72rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge-course {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .enap-courses-list {
+      padding: 1.5rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .enap-course-pill {
+      background: rgba(16, 25, 39, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .enap-course-pill:hover {
+      background: rgba(21, 34, 53, 0.9);
+      border-color: rgba(212, 175, 55, 0.25);
+    }
+
+    .enap-course-info {
+      font-size: 0.86rem;
+      color: #dbe7f5;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .enap-course-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .enap-course-hours {
+      font-size: 0.78rem;
+      color: var(--accent-gold);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .enap-course-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    /* 10. CONTATO */
+    .contact-card {
+      background: linear-gradient(145deg, var(--surface-card) 0%, #111e2f 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 4rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+
+    .contact-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-desc {
+      color: #b5cbe4;
+      font-size: 1.12rem;
+      max-width: 620px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .contact-email-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(16, 25, 39, 0.8);
+      border: 1px solid var(--border);
+      padding: 0.85rem 1.75rem;
+      border-radius: 50px;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .contact-email-badge:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .social-buttons-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #e2ecf9;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .social-btn:hover {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: var(--accent-gold);
+      color: #ffffff;
+      transform: translateY(-3px);
+    }
+
+    .social-btn-whatsapp {
+      border-color: rgba(37, 211, 102, 0.35);
+      background: rgba(16, 25, 39, 0.9);
+    }
+    .social-btn-whatsapp:hover {
+      background: rgba(37, 211, 102, 0.14);
+      border-color: #25d366;
+    }
+    .social-btn-whatsapp .whatsapp-num {
+      color: #25d366;
+      font-weight: 600;
+      margin-left: 0.25rem;
+    }
+
+    /* Botão Flutuante de WhatsApp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 58px;
+      height: 58px;
+      background: #25d366;
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 22px rgba(37, 211, 102, 0.45);
+      z-index: 999;
+      text-decoration: none;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.2s ease;
+    }
+    .whatsapp-float:hover {
+      transform: translateY(-4px) scale(1.06);
+      box-shadow: 0 10px 28px rgba(37, 211, 102, 0.65);
+      background: #22bf5b;
+      color: #ffffff;
+    }
+    .whatsapp-float svg {
+      width: 32px;
+      height: 32px;
+      fill: #ffffff;
+    }
+
+    /* Rodapé */
+    .site-footer {
+      background: #060a10;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+      text-align: center;
+      color: #7d96b4;
+      font-size: 0.88rem;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-cta {
+        justify-content: center;
+      }
+      .hero-description {
+        margin: 0 auto 2.25rem;
+      }
+      .about-card {
+        grid-template-columns: 1fr;
+        padding: 2.5rem;
+      }
+      .about-img-box {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .publicos-grid {
+        grid-template-columns: 1fr;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .honors-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .edu-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .edu-sections-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 74px;
+        left: 0;
+        width: 100%;
+        background: #090e17;
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
+      .mobile-menu-btn {
+        display: block;
+      }
+      .atribuicoes-grid {
+        grid-template-columns: 1fr;
+      }
+      .enap-stats-banner {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2.3rem;
+      }
+      .portrait-frame {
+        max-width: 280px;
+      }
+      .services-grid, .honors-grid, .edu-stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .publico-subdivisions {
+        grid-template-columns: 1fr;
+      }
+      .publicos-callout-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .about-highlights {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .current-post-card {
+        padding: 1.75rem 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navegação Fixa -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="#inicio" class="brand-mark">
+        <span class="brand-name">Nadelson Costa Nogueira Jr.</span>
+        <span class="brand-tag">Consultoria Estratégica</span>
+      </a>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#inicio" class="nav-link active">Início</a></li>
+        <li><a href="#sobre" class="nav-link">Sobre</a></li>
+        <li><a href="#lotacao" class="nav-link">Lotação Atual</a></li>
+        <li><a href="#formacao" class="nav-link">Formação</a></li>
+        <li><a href="#consultoria" class="nav-link">Consultoria</a></li>
+        <li><a href="#publicos" class="nav-link">Públicos</a></li>
+        <li><a href="#trajetoria" class="nav-link">Trajetória</a></li>
+        <li><a href="#projetos" class="nav-link">Projetos</a></li>
+        <li><a href="#honrarias" class="nav-link">Honrarias</a></li>
+        <li><a href="#certificacoes" class="nav-link">Certificações</a></li>
+        <li><a href="#contato" class="nav-link">Contato</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. HERO (Início) -->
+    <section id="inicio" class="hero-section">
+      <div class="hero-glow-1"></div>
+      <div class="hero-glow-2"></div>
+      <div class="container hero-grid">
+        <div class="hero-text-content">
+          <div class="hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            26+ anos de excelência institucional no TJRJ
+          </div>
+          <h1 class="hero-title">
+            <span>Nadelson Costa</span>
+            <span class="highlight">Nogueira Junior</span>
+          </h1>
+          <p class="hero-role">
+            Consultor Estratégico em Gestão de Pessoas, Marketing e Análise Sociopolítica
+          </p>
+          <p class="hero-description">
+            Transformando gestão, dados e inovação em resultados para o setor público e para as organizações.
+          </p>
+          <div class="hero-cta">
+            <a href="#trajetoria" class="btn-gold">
+              Conheça minha trajetória
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
+            </a>
+            <a href="#contato" class="btn-outline-gold">
+              Fale comigo
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-image-wrap">
+          <div class="portrait-frame">
+            <img src="https://generated-images.adapta.one/nadelsoncn%40gmail.com/01a0b63f-f234-7658-825d-2decefc557fa/2026-09-21T17-40-31-317Z_Original_user_intent_Tool_generated_image_directi.png" 
+                 alt="Nadelson Costa Nogueira Junior">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SOBRE -->
+    <section id="sobre" class="section-spacing">
+      <div class="container">
+        <div class="about-card">
+          <div class="about-img-box">
+            <img src="https://generated-images.adapta.one/nadelsoncn%40gmail.com/01a0b63f-f234-7658-825d-2decefc557fa/2026-09-19T03-23-09-330Z_Original_user_intent_Tool_generated_image_directi.png" 
+                 alt="Nadelson Costa Nogueira Junior em ambiente corporativo elegante">
+          </div>
+          <div class="about-content">
+            <div class="section-eyebrow">Apresentação Institucional</div>
+            <h3>Liderança Estratégica, Inovação e Governança Pública</h3>
+            <p class="about-text">
+              Com mais de 26 anos de trajetória dedicada ao Tribunal de Justiça do Estado do Rio de Janeiro (TJRJ), minha carreira evoluiu da solidez administrativa para a liderança estratégica e a inovação. Como responsável pela Direção do Fórum e Chefe de Serventia na Comarca de Rio Bonito, implementei melhorias que otimizaram processos e impactaram positivamente a eficiência do setor público.
+            </p>
+            <p class="about-text">
+              Minha formação inclui graduação em Gestão de Recursos Humanos (FACOS), MBAs em Gestão de Pessoas e RH, Marketing e Redes Sociais, Gestão de Projetos, Gestão Social, Gestão Pública e Financeira e Políticas Públicas, além de especializações em Ciências Políticas, Filosofia, Sociologia e Antropologia — com MBAs em andamento em Segurança Pública e Defesa Nacional, Gestão de Cidades, Relações Internacionais, Inovação e Transformação Digital nos Negócios e Governança, Compliance e Educação Corporativa, e especialização em Gestão de Cidades Inteligentes e Sustentáveis.
+            </p>
+            <p class="about-text">
+              Essa base me permite ter uma visão estratégica e humanizada. Atuo com foco na inovação e na aplicação de melhores práticas de gestão, incluindo a experiência com o terceiro setor, para gerar resultados sustentáveis e de valor social.
+            </p>
+            <div class="about-highlights">
+              <div>
+                <div class="highlight-stat-num">26+</div>
+                <div class="highlight-stat-label">Anos no TJRJ</div>
+              </div>
+              <div>
+                <div class="highlight-stat-num">160+</div>
+                <div class="highlight-stat-label">Cursos ENAP</div>
+              </div>
+              <div>
+                <div class="highlight-stat-num">12</div>
+                <div class="highlight-stat-label">Honrarias & Moções</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. LOTAÇÃO ATUAL -->
+    <section id="lotacao" class="section-spacing">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Atuação em Exercício</div>
+          <h2 class="section-title">Lotação Atual no Judiciário Fluminense</h2>
+          <p class="section-desc">Supervisão estratégica de metas nacionais, inteligência de dados e garantia do controle humano sobre soluções de Inteligência Artificial.</p>
+        </div>
+
+        <div class="current-post-card">
+          <div class="current-header">
+            <div>
+              <span class="current-org">Tribunal de Justiça do Estado do Rio de Janeiro (TJRJ)</span>
+              <h3 class="current-role-title">Assistente III — CGJ - DGFAJ - DIAAI - SEIPI</h3>
+              <p style="color: #9ab2d0; font-size: 0.95rem;">Serviço de Monitoramento e Análise de Indicadores</p>
+            </div>
+            <div class="current-badge-active">
+              <span class="pulse-dot"></span>
+              Cargo Ativo
+            </div>
+          </div>
+
+          <div class="current-meta-tags">
+            <span class="meta-tag">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Período: <strong>Maio de 2026 até o momento (5 meses)</strong>
+            </span>
+            <span class="meta-tag">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Regime: <strong>Tempo Integral</strong>
+            </span>
+            <span class="meta-tag">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Localização: <strong>Rio de Janeiro / RJ · Modalidade Remota</strong>
+            </span>
+          </div>
+
+          <div class="atribuicoes-grid">
+            <div class="atribuicao-card">
+              <span class="atribuicao-tag">Eixo Estratégico I</span>
+              <h4>Monitoramento das Metas Nacionais do CNJ 2026</h4>
+              <p>
+                Acompanhamento e monitoramento rigoroso do 1º ciclo da <strong>Meta 6 do CNJ 2026</strong> (julgamento de 50% das ações ambientais distribuídas até 31/12/2025) e da <strong>Meta 7</strong> (direitos das comunidades indígenas e quilombolas; crimes de racismo, injúria racial e crimes de ódio).
+              </p>
+            </div>
+            <div class="atribuicao-card">
+              <span class="atribuicao-tag">Eixo Estratégico II</span>
+              <h4>Validação Humana de Atos Judiciais por IA</h4>
+              <p>
+                Validação humana de atos ordinatórios e despachos classificados por ferramentas de IA conforme as <strong>Resoluções CNJ nº 615/2025 e 674/2026</strong>. Definição de critérios objetivos, relatórios de conformidade e subsídios técnicos contínuos para aprimoramento dos modelos algorítmicos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. FORMAÇÃO -->
+    <section id="formacao" class="section-spacing" style="background: rgba(16, 25, 39, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Qualificação Acadêmica</div>
+          <h2 class="section-title">Formação Multidisciplinar</h2>
+          <p class="section-desc">Visão holística articulando gestão de recursos humanos, administração pública, marketing de precisão e ciências sociais.</p>
+        </div>
+
+        <div class="edu-stats-grid">
+          <div class="edu-stat-box">
+            <div class="edu-stat-num">1</div>
+            <div class="edu-stat-label">Graduação Concluída</div>
+            <div class="edu-stat-sub">Gestão de RH (FACOS)</div>
+          </div>
+          <div class="edu-stat-box">
+            <div class="edu-stat-num">6</div>
+            <div class="edu-stat-label">MBAs Concluídos</div>
+            <div class="edu-stat-sub">Gestão, Marketing e Políticas</div>
+          </div>
+          <div class="edu-stat-box">
+            <div class="edu-stat-num">4</div>
+            <div class="edu-stat-label">Especializações Concluídas</div>
+            <div class="edu-stat-sub">Ciências Humanas e Sociais</div>
+          </div>
+          <div class="edu-stat-box" style="border-color: var(--border-gold);">
+            <div class="edu-stat-num">6</div>
+            <div class="edu-stat-label">Em Andamento</div>
+            <div class="edu-stat-sub">5 MBAs + 1 Especialização</div>
+          </div>
+        </div>
+
+        <div class="edu-sections-split">
+          <!-- Concluídas -->
+          <div class="edu-block">
+            <div class="edu-block-title">
+              <h4>11 Formações Concluídas</h4>
+              <span class="badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3);">Concluído</span>
+            </div>
+            <ul class="edu-list">
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>Tecnólogo em Gestão de Recursos Humanos</h5>
+                  <p>FACOS — Faculdade Cenecista de Osório</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA Executivo em Gestão de Pessoas e RH</h5>
+                  <p>Liderança organizacional, clima e retenção de talentos</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA em Marketing e Redes Sociais</h5>
+                  <p>Posicionamento institucional e presença digital estratégica</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA em Gestão de Projetos</h5>
+                  <p>Governança, PMBOK, metodologias ágeis e entregas</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA em Gestão Social</h5>
+                  <p>Impacto cidadão, terceiro setor e sustentabilidade</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA em Gestão Pública e Financeira</h5>
+                  <p>Orçamento fiscal, governança e responsabilidade fiscal</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>MBA em Políticas Públicas</h5>
+                  <p>Ciclo de formulação, execução e mensuração de políticas</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet"></span>
+                <div class="edu-item-body">
+                  <h5>Especializações em Ciências Humanas (4 Pós-Graduações)</h5>
+                  <p>Ciências Políticas · Filosofia · Sociologia · Antropologia</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Em Andamento -->
+          <div class="edu-block" style="border-color: rgba(212, 175, 55, 0.4);">
+            <div class="edu-block-title">
+              <h4>Especializações em Andamento</h4>
+              <span class="badge-in-progress">Em Andamento</span>
+            </div>
+            <ul class="edu-list">
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>MBA em Segurança Pública e Defesa Nacional</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Estratégia integrada de segurança e gestão interinstitucional</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>MBA em Gestão de Cidades</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Planejamento territorial, urbanismo e desenvolvimento local</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>MBA em Relações Internacionais</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Diplomacia corporativa, cooperação e cenários globais</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>MBA em Inovação e Transformação Digital nos Negócios</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Cultura de inovação, automação e modelos digitais</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>MBA em Governança, Compliance e Educação Corporativa</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Integridade pública, conformidade regulatória e T&D</p>
+                </div>
+              </li>
+              <li class="edu-item">
+                <span class="edu-bullet" style="background: #38bdf8;"></span>
+                <div class="edu-item-body">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h5>Especialização em Gestão de Cidades Inteligentes e Sustentáveis</h5>
+                    <span class="badge-in-progress">Em andamento</span>
+                  </div>
+                  <p>Smart cities, sensores, ESG urbano e mobilidade conectada</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CONSULTORIA -->
+    <section id="consultoria" class="section-spacing">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Soluções Corporativas & Governamentais</div>
+          <h2 class="section-title">Áreas de Consultoria Estratégica</h2>
+          <p class="section-desc">Consultoria estratégica e aconselhamento para governos, organizações sociais, autoridades e empresas — unindo gestão, dados, IA e análise sociopolítica para decisões e resultados sustentáveis.</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- 1 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <h4>Gestão de Pessoas e RH</h4>
+            <p>Diagnóstico de clima organizacional, mapeamento e gestão por competências, liderança humanizada, retenção de talentos e mediação de conflitos.</p>
+          </div>
+
+          <!-- 2 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>
+            </div>
+            <h4>Marketing e Redes Sociais</h4>
+            <p>Comunicação institucional, estratégias de autoridade e reputação, linguagem simples para órgãos públicos e presença digital orientada a resultados.</p>
+          </div>
+
+          <!-- 3 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <h4>Análise Sociopolítica</h4>
+            <p>Mapeamento de stakeholders, cenários eleitorais e legislativos, análise de risco sociopolítico e articulação com a sociedade civil e terceiro setor.</p>
+          </div>
+
+          <!-- 4 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h4>Inovação & Transformação Digital</h4>
+            <p>Modernização de processos burocráticos, mentalidade ágil em governos, digitalização de serviços ao cidadão e cultura de melhoria contínua.</p>
+          </div>
+
+          <!-- 5 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <h4>Ciência de Dados & IA</h4>
+            <p>Implementação de governança de dados, métricas e dashboards executivos, auditoria e validação humana de sistemas de Inteligência Artificial.</p>
+          </div>
+
+          <!-- 6 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <h4>Gestão de Cidades</h4>
+            <p>Gestão urbana e municipal integrada, planejamento de cidades inteligentes e sustentáveis e modernização administrativa para prefeituras.</p>
+          </div>
+
+          <!-- 7 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+            </div>
+            <h4>Gestão Pública</h4>
+            <p>Administração pública contemporânea, finanças públicas, orçamento plurianual (PPA, LDO, LOA), governança e eficiência da máquina estatal.</p>
+          </div>
+
+          <!-- 8 -->
+          <div class="service-card">
+            <div class="service-icon-box">
+              <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+            </div>
+            <h4>Políticas Públicas</h4>
+            <p>Formulação baseada em evidências, avaliação ex-ante e ex-post de programas governamentais, participação cidadã e impacto de valor social.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: PÚBLICOS ATENDIDOS -->
+    <section id="publicos" class="section-spacing" style="background: rgba(16, 25, 39, 0.45);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Posicionamento de Atuação</div>
+          <h2 class="section-title">Públicos Atendidos</h2>
+          <p class="section-desc">Como posso apoiar cada tipo de organização — no estratégico e no aconselhamento.</p>
+        </div>
+
+        <div class="publicos-grid">
+          <!-- CARD 1: Governos -->
+          <div class="publico-card">
+            <div class="publico-header">
+              <div class="publico-icon-box">
+                <!-- Ícone Prédio / Colunas -->
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10zM8 14v3m4-3v3m4-3v3"></path>
+                </svg>
+              </div>
+              <div class="publico-title-wrap">
+                <h3>Governos</h3>
+                <span class="publico-scope">Municipais, Estaduais e Federais</span>
+              </div>
+            </div>
+
+            <div class="publico-base-box">
+              <strong>Base de Formação</strong>
+              MBA Gestão Pública e Financeira, MBA Políticas Públicas, MBA Gestão de Cidades (em andamento), Especialização em Cidades Inteligentes (em andamento) e 8.200h ENAP.
+            </div>
+
+            <div class="publico-subdivisions">
+              <div class="publico-subcol subcol-estrat">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                  Estratégico
+                </span>
+                <ul class="publico-items-list">
+                  <li>Planejamento estratégico governamental (PPA, LDO, LOA) e gestão para resultados</li>
+                  <li>Modernização da máquina pública: digitalização, padronização de processos e eficiência administrativa</li>
+                  <li>Cidades inteligentes e sustentáveis: diagnóstico, plano de transformação urbana e projetos municipais</li>
+                  <li>Monitoramento de metas e indicadores (experiência real com as Metas do CNJ)</li>
+                </ul>
+              </div>
+
+              <div class="publico-subcol subcol-acons">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  Aconselhamento
+                </span>
+                <ul class="publico-items-list">
+                  <li>Assessoria a prefeitos, secretários e gestores públicos</li>
+                  <li>Participação em conselhos municipais e comitês de governança</li>
+                  <li>Orientação sobre compliance, integridade e LGPD no setor público</li>
+                  <li>Aconselhamento em políticas públicas: desenho, implementação e avaliação</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: ONGs e Terceiro Setor -->
+          <div class="publico-card">
+            <div class="publico-header">
+              <div class="publico-icon-box">
+                <!-- Ícone Coração / Mãos -->
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </div>
+              <div class="publico-title-wrap">
+                <h3>ONGs e Terceiro Setor</h3>
+                <span class="publico-scope">Organizações Sociais e Fundações</span>
+              </div>
+            </div>
+
+            <div class="publico-base-box">
+              <strong>Base de Formação</strong>
+              MBA Gestão Social, MBA Gestão de Projetos e experiência prática com o terceiro setor.
+            </div>
+
+            <div class="publico-subdivisions">
+              <div class="publico-subcol subcol-estrat">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                  Estratégico
+                </span>
+                <ul class="publico-items-list">
+                  <li>Gestão de projetos sociais: desenho, captação, execução e prestação de contas</li>
+                  <li>Governança institucional e planejamento estratégico de ONGs</li>
+                  <li>Gestão de pessoas: voluntários, equipes enxutas e cultura organizacional</li>
+                  <li>Comunicação e marketing social para captação e engajamento</li>
+                </ul>
+              </div>
+
+              <div class="publico-subcol subcol-acons">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  Aconselhamento
+                </span>
+                <ul class="publico-items-list">
+                  <li>Conselho consultivo de ONGs e institutos</li>
+                  <li>Mentoria a lideranças do terceiro setor</li>
+                  <li>Estruturação de políticas internas, transparência e compliance</li>
+                  <li>Apoio na relação com o poder público: convênios, emendas e editais</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: Autoridades -->
+          <div class="publico-card">
+            <div class="publico-header">
+              <div class="publico-icon-box">
+                <!-- Ícone Balança / Justiça -->
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+                </svg>
+              </div>
+              <div class="publico-title-wrap">
+                <h3>Autoridades</h3>
+                <span class="publico-scope">Judiciário, Legislativo e Órgãos de Controle</span>
+              </div>
+            </div>
+
+            <div class="publico-base-box">
+              <strong>Base de Formação</strong>
+              26 anos no TJRJ, MBA Segurança Pública e Defesa Nacional (em andamento), especializações em Ciências Políticas, Filosofia, Sociologia e Antropologia, e experiência com IA no Judiciário (SEIPI).
+            </div>
+
+            <div class="publico-subdivisions">
+              <div class="publico-subcol subcol-estrat">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                  Estratégico
+                </span>
+                <ul class="publico-items-list">
+                  <li>Modernização de serventias e cartórios: processos, rotinas e digitalização</li>
+                  <li>IA no Judiciário: supervisão humana de atos classificados por IA (Resoluções CNJ 615/2025 e 674/2026)</li>
+                  <li>Monitoramento de metas e indicadores do CNJ</li>
+                  <li>Análise sociopolítica de cenários para tomada de decisão</li>
+                </ul>
+              </div>
+
+              <div class="publico-subcol subcol-acons">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  Aconselhamento
+                </span>
+                <ul class="publico-items-list">
+                  <li>Assessoria a magistrados, diretores de foro e gestores de tribunais</li>
+                  <li>Apoio a comissões e grupos de trabalho</li>
+                  <li>Aconselhamento em políticas de segurança pública e defesa nacional</li>
+                  <li>Consultoria a gabinetes parlamentares em análise sociopolítica</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 4: Corporativo -->
+          <div class="publico-card">
+            <div class="publico-header">
+              <div class="publico-icon-box">
+                <!-- Ícone Prédio / Gráfico -->
+                <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+              </div>
+              <div class="publico-title-wrap">
+                <h3>Corporativo</h3>
+                <span class="publico-scope">Empresas e Negócios</span>
+              </div>
+            </div>
+
+            <div class="publico-base-box">
+              <strong>Base de Formação</strong>
+              MBA Gestão de Pessoas e RH, MBA Marketing e Redes Sociais, MBA Inovação e Transformação Digital (em andamento), MBA Governança, Compliance e Educação Corporativa (em andamento).
+            </div>
+
+            <div class="publico-subdivisions">
+              <div class="publico-subcol subcol-estrat">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                  Estratégico
+                </span>
+                <ul class="publico-items-list">
+                  <li>Gestão de pessoas: cultura, liderança, engajamento e desenvolvimento</li>
+                  <li>Marketing digital e redes sociais para negócios</li>
+                  <li>Transformação digital e IA aplicada a processos e decisões</li>
+                  <li>Governança, compliance e educação corporativa</li>
+                </ul>
+              </div>
+
+              <div class="publico-subcol subcol-acons">
+                <span class="publico-subcol-title">
+                  <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+                  Aconselhamento
+                </span>
+                <ul class="publico-items-list">
+                  <li>Conselho consultivo e comitês de governança</li>
+                  <li>Mentoria executiva em liderança e carreira</li>
+                  <li>Advisory em RH, inovação e transformação digital</li>
+                  <li>Comitês de ética e integridade</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nota de Destaque -->
+        <div class="publicos-callout-card">
+          <div class="publicos-callout-icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="publicos-callout-text">
+            <strong>Estratégico</strong> = entregas estruturadas (diagnóstico, plano, implementação e projetos). &nbsp;|&nbsp; 
+            <strong>Aconselhamento</strong> = posições de confiança contínua (conselhos, assessoria recorrente e mentoria).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. TRAJETÓRIA PROFISSIONAL -->
+    <section id="trajetoria" class="section-spacing" style="background: rgba(16, 25, 39, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Carreira Consolidada</div>
+          <h2 class="section-title">Trajetória Profissional no TJRJ</h2>
+          <p class="section-desc">Construção contínua de liderança, gestão cartorária, inovação processual e supervisão de inteligência de dados judiciais.</p>
+        </div>
+
+        <div class="timeline-wrap">
+          <!-- 1 -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-top">
+                <span class="timeline-period">2015 a 2018</span>
+                <span class="badge" style="background: rgba(255,255,255,0.08); color: #c4d7ec;">Fórum de Rio Bonito</span>
+              </div>
+              <h4 class="timeline-title">Secretário da Direção do Fórum</h4>
+              <div class="timeline-institution">Comarca de Rio Bonito — TJRJ</div>
+              <p class="timeline-desc">
+                Chefia executiva e liderança operacional de equipes, gestão de pessoas, logística predial, relações públicas e comunicação organizacional. Responsável pelo recrutamento, treinamento e desenvolvimento de pessoal, fiscalização rigorosa de contratos administrativos e planejamento estratégico local. Conduziu o marco histórico de digitalização integral de rotinas da Direção do Fórum em 2017.
+              </p>
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-top">
+                <span class="timeline-period">Dezembro de 2018 a Maio de 2025</span>
+                <span class="badge" style="background: rgba(255,255,255,0.08); color: #c4d7ec;">1ª Instância</span>
+              </div>
+              <h4 class="timeline-title">Chefe de Serventia de 1ª Instância — DCP</h4>
+              <div class="timeline-institution">Distribuidor, Contador e Partidor da Comarca de Rio Bonito — TJRJ</div>
+              <p class="timeline-desc">
+                Direção técnica das operações de cálculos judiciais complexos, partilha formal de bens na área de órfãos e sucessões e distribuição equitativa de feitos judiciais cíveis, fazendários e criminais. Padronização de rotinas cartorárias e gestão da celeridade processual.
+              </p>
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-top">
+                <span class="timeline-period">Junho de 2025 a Maio de 2026</span>
+                <span class="badge" style="background: rgba(255,255,255,0.08); color: #c4d7ec;">Regional</span>
+              </div>
+              <h4 class="timeline-title">Assistente III — 2º Núcleo Distribuidor e Partidor Regional</h4>
+              <div class="timeline-institution">Posto Avançado Rio Bonito — TJRJ</div>
+              <p class="timeline-desc">
+                Direção técnica das operações administrativas, pesquisa e expedição das certidões judiciais e extrajudiciais.
+              </p>
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="timeline-item is-current">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card" style="border-color: var(--border-gold);">
+              <div class="timeline-top">
+                <span class="timeline-period" style="color: #4ade80;">Maio de 2026 até o momento</span>
+                <span class="badge" style="background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(74,222,128,0.4);">Atual</span>
+              </div>
+              <h4 class="timeline-title">Assistente III — CGJ - DGFAJ - DIAAI - SEIPI</h4>
+              <div class="timeline-institution">Serviço de Monitoramento e Análise de Indicadores — TJRJ (Remoto)</div>
+              <p class="timeline-desc">
+                Análise e monitoramento das Metas 6 e 7 do CNJ 2026 e condução do programa de validação humana sistemática de atos judiciais classificados por Inteligência Artificial (atos ordinatórios e despachos), em estrita conformidade com as Resoluções CNJ nº 615/2025 e 674/2026 e as diretrizes da governança de dados.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. PROJETOS DE DESTAQUE -->
+    <section id="projetos" class="section-spacing">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Impacto Institucional</div>
+          <h2 class="section-title">Projetos de Destaque</h2>
+          <p class="section-desc">Projetos estratégicos alinhados às diretrizes do Conselho Nacional de Justiça (CNJ) e às fronteiras da Inteligência Artificial aplicada ao Direito.</p>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Projeto 1 -->
+          <div class="project-card">
+            <span class="project-badge">Meta Nacional CNJ</span>
+            <h4>Monitoramento da Meta 06 do CNJ 2026 (Ações Ambientais)</h4>
+            <p>
+              Análise aprofundada de dados e indicadores processuais no âmbito do 1º ciclo da Meta 6 das Metas Nacionais do Poder Judiciário (Justiça Estadual). A meta estipula a identificação e julgamento célere de 50% dos processos de ações ambientais distribuídos até 31/12/2025. Desenvolvido no âmbito da CGJ/DGFAJ/DIAAI/SEIPI com foco na sustentabilidade e tutela ecológica.
+            </p>
+            <div class="project-footer">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+              Indicadores de Celeridade & Justiça Climática
+            </div>
+          </div>
+
+          <!-- Projeto 2 -->
+          <div class="project-card">
+            <span class="project-badge">Direitos Humanos & Equidade</span>
+            <h4>Monitoramento da Meta 07 do CNJ 2026 (Indígenas, Quilombolas e Racismo)</h4>
+            <p>
+              Estruturação de fluxo analítico e relatórios estratégicos para o cumprimento da Meta 7 do CNJ: identificação e julgamento de 50% dos processos relativos aos direitos das comunidades indígenas, 50% dos processos de comunidades quilombolas e 50% das ações penais de crimes de racismo, injúria racial e crimes de ódio distribuídos até 31/12/2025.
+            </p>
+            <div class="project-footer">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+              Garantia de Direitos Fundamentais
+            </div>
+          </div>
+
+          <!-- Projeto 3 -->
+          <div class="project-card">
+            <span class="project-badge">Governança Algorítmica</span>
+            <h4>Validação Humana de Atos Judiciais por IA</h4>
+            <p>
+              Auditoria sistemática e validação humana de atos ordinatórios (conformes ou indevidos) e despachos judiciais (conformes ou protelatórios) classificados por modelos de IA, com base nas Resoluções CNJ nº 615/2025 e 674/2026. Definição de critérios objetivos de validação, extração de dados, mensuração de taxa de conformidade e emissão de notas técnicas de governança.
+            </p>
+            <div class="project-footer">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Supervisão Humana Exigida pelo CNJ
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. HONRARIAS -->
+    <section id="honrarias" class="section-spacing" style="background: rgba(16, 25, 39, 0.4);">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Reconhecimento Público</div>
+          <h2 class="section-title">Honrarias e Moções Institucionais</h2>
+          <p class="section-desc">Distinções concedidas pelos Poderes Legislativo e Judiciário, Ministério Público e Ordem dos Advogados do Brasil ao longo de mais de duas décadas.</p>
+        </div>
+
+        <div class="honors-grid">
+          <!-- 1 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Maio / 2025</div>
+              <h4 class="honor-title">Título de Cidadão Riobonitense</h4>
+              <p class="honor-org">Câmara Municipal de Rio Bonito · Resolução nº 44/2025, concedido pelo Vereador Aliomar Guimarães Leite Filho.</p>
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Dezembro / 2018</div>
+              <h4 class="honor-title">Medalha de Mérito "Advogado e Poeta Leir Moraes"</h4>
+              <p class="honor-org">35ª Subseção da OAB/RJ · Triênio 2016/2018, Presidente César Gomes de Sá.</p>
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Janeiro / 2010</div>
+              <h4 class="honor-title">Anotação de Elogios — MP/RJ</h4>
+              <p class="honor-org">Ministério Público do Estado do Rio de Janeiro, Dra. Marcele Moreira Tavares Navega · Atuação na eleição do Conselho Tutelar.</p>
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Outubro / 2009</div>
+              <h4 class="honor-title">Anotação de Elogios — TJRJ</h4>
+              <p class="honor-org">Juíza de Direito Dra. Renata Vivas de Bragança Pimentel · Dedicação na implantação e aplicação do SIMAPES.</p>
+            </div>
+          </div>
+
+          <!-- 5 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Julho / 2008</div>
+              <h4 class="honor-title">Anotação de Elogios — TJRJ</h4>
+              <p class="honor-org">Juíza de Direito Dra. Renata Vivas de Bragança Pimentel · Atuação destacada no Planejamento Estratégico.</p>
+            </div>
+          </div>
+
+          <!-- 6 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Outubro / 2007</div>
+              <h4 class="honor-title">Anotação de Elogios — TJRJ</h4>
+              <p class="honor-org">Juíza de Direito Dra. Renata Vivas de Bragança Pimentel · Eficiência e lealdade exemplar no serviço público.</p>
+            </div>
+          </div>
+
+          <!-- 7 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Abril / 2007</div>
+              <h4 class="honor-title">Moção de Congratulações — OAB/RJ</h4>
+              <p class="honor-org">35ª Subseção da Ordem dos Advogados do Brasil, concedida pelo Presidente Antônio Carlos Guadelupe.</p>
+            </div>
+          </div>
+
+          <!-- 8 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Janeiro / 2007</div>
+              <h4 class="honor-title">Anotação de Elogios — MP/RJ</h4>
+              <p class="honor-org">Ministério Público do Estado do Rio de Janeiro, Dra. Ana Paula Lopes Perdigão de Amorim Moura.</p>
+            </div>
+          </div>
+
+          <!-- 9 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Março / 2006</div>
+              <h4 class="honor-title">Anotação de Elogios</h4>
+              <p class="honor-org">Escrivã Katia da Silveira Salvador · Dedicação e comprometimento nos serviços da comarca.</p>
+            </div>
+          </div>
+
+          <!-- 10 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Fevereiro / 2005</div>
+              <h4 class="honor-title">Anotação de Elogios</h4>
+              <p class="honor-org">Vereador Carlos Cordeiro Neto · Excelência técnica e rigor em fiscalização eleitoral.</p>
+            </div>
+          </div>
+
+          <!-- 11 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Dezembro / 2004</div>
+              <h4 class="honor-title">Anotação de Elogios — TJRJ</h4>
+              <p class="honor-org">Juíza de Direito Dra. Renata Vivas de Bragança Pimentel · Desempenho e conduta exemplar.</p>
+            </div>
+          </div>
+
+          <!-- 12 -->
+          <div class="honor-card">
+            <div class="honor-icon">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="honor-date">Dezembro / 2004</div>
+              <h4 class="honor-title">Moção de Aplausos</h4>
+              <p class="honor-org">Câmara Municipal de Rio Bonito · Serviços de relevância institucional prestados nas eleições municipais de 2004.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. CERTIFICAÇÕES ENAP -->
+    <section id="certificacoes" class="section-spacing">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-eyebrow">Aprendizado Contínuo de Alto Nível</div>
+          <h2 class="section-title">Programas e Certificações ENAP</h2>
+          <p class="section-desc">
+            Formação contínua na Escola Nacional de Administração Pública (ENAP) — mais de 160 certificações e 8.200+ horas de capacitação em gestão pública, dados, IA e inovação.
+          </p>
+        </div>
+
+        <div class="enap-stats-banner">
+          <div class="enap-stat-item">
+            <div class="enap-stat-value">160+</div>
+            <div class="enap-stat-label">certificações ENAP</div>
+            <div class="enap-stat-sub">Validada pelo Governo Federal</div>
+          </div>
+          <div style="width: 1px; height: 60px; background: var(--border); display: block;" class="hide-mobile"></div>
+          <div class="enap-stat-item">
+            <div class="enap-stat-value">8.200+</div>
+            <div class="enap-stat-label">horas de formação</div>
+            <div class="enap-stat-sub">Especialização contínua</div>
+          </div>
+          <div style="width: 1px; height: 60px; background: var(--border); display: block;" class="hide-mobile"></div>
+          <div class="enap-stat-item">
+            <div class="enap-stat-value">15</div>
+            <div class="enap-stat-label">Blocos Temáticos</div>
+            <div class="enap-stat-sub">Da IA à Governança Pública</div>
+          </div>
+        </div>
+
+        <div class="enap-search-box">
+          <svg class="enap-search-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="text" id="certSearch" class="enap-search-input" placeholder="Buscar por tema, curso ou tecnologia (ex: IA, Dados, Scrum, LGPD)...">
+        </div>
+
+        <div class="enap-filter-bar">
+          <button class="enap-filter-btn active" data-filter="all">Todos os Blocos</button>
+          <button class="enap-filter-btn" data-filter="programas">Apenas Programas</button>
+          <button class="enap-filter-btn" data-filter="dados-ia">IA & Dados</button>
+          <button class="enap-filter-btn" data-filter="gestao-publica">Gestão Pública</button>
+          <button class="enap-filter-btn" data-filter="governanca">Governança & Ética</button>
+          <button class="enap-filter-btn" data-filter="pessoas">Pessoas & Liderança</button>
+        </div>
+
+        <div class="enap-blocks-container" id="enapBlocksWrapper">
+
+          <!-- BLOCO 1 -->
+          <div class="enap-block-section" data-cat="dados-ia programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Bloco 1 — Inteligência Artificial e Dados
+              </h4>
+              <span class="badge-program">Programas de Formação</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Fundamentos de Inteligência Artificial para Lideranças: Aprimorando a Tomada de Decisão</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">106h</span>
+                  <span class="enap-course-date">06/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">IA para Otimização de Processos e Tomada de Decisão para Gestores Públicos</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">71h</span>
+                  <span class="enap-course-date">07/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Executivo de Dados e IA: Fundamentos e Estratégias no Setor Público</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">260h</span>
+                  <span class="enap-course-date">07/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Engenharia de Dados e IA Aplicada para Gestores de TIC</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">104h</span>
+                  <span class="enap-course-date">07/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">IA Estratégica e Visão de Futuro para Lideranças no Setor Público</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">133h</span>
+                  <span class="enap-course-date">08/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Resolução de Problemas com Base em Dados</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">241h</span>
+                  <span class="enap-course-date">28/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Mentalidade Digital</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">446h</span>
+                  <span class="enap-course-date">29/04/2026</span>
+                </div>
+              </div>
+              <div class="enap-course-pill">
+                <span class="enap-course-info">Gestão e Qualidade de Ativos de Dados no Setor Público</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">136h</span>
+                  <span class="enap-course-date">26/06/2026</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOCO 2 -->
+          <div class="enap-block-section" data-cat="dados-ia">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                Bloco 2 — Dados, IA e Transformação Digital (Cursos)
+              </h4>
+              <span class="badge-course">34 Cursos Especializados</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Análise de dados como suporte à tomada de decisão</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Aplicação do Power BI para Aprimoramento da Gestão</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inteligência Artificial Generativa</span><div class="enap-course-meta"><span class="enap-course-hours">2h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inteligência Artificial no Contexto do Serviço Público</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Liderança Estratégica com IA na Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Novas Tecnologias para a Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Transformação Digital no Serviço Público</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">UX: Como Melhorar a Experiência do Usuário no Serviço Público Digital</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governança de Dados</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Análise de dados: uma leitura crítica das informações</span><div class="enap-course-meta"><span class="enap-course-hours">23h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Big Data em Apoio à Tomada de Decisão</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Visualização de Dados Aplicada à Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Storytelling com Dados para Comunicação Profissional de Sucesso</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Estatística para Análise de Dados na Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Ciência de Dados - Tratamento de Dados</span><div class="enap-course-meta"><span class="enap-course-hours">2h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Ciência de Dados - Conceitos e Ferramentas</span><div class="enap-course-meta"><span class="enap-course-hours">4h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Aprendendo com Python</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inteligência Artificial para simplificar o dia a dia</span><div class="enap-course-meta"><span class="enap-course-hours">4h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Desvendando a Inteligência Artificial na Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">IA - Aplicações no Governo Federal</span><div class="enap-course-meta"><span class="enap-course-hours">8h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Ética em IA</span><div class="enap-course-meta"><span class="enap-course-hours">2h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Liderança em IA no governo</span><div class="enap-course-meta"><span class="enap-course-hours">4h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Engenharia de prompt eficaz para servidores públicos</span><div class="enap-course-meta"><span class="enap-course-hours">2h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Mundo Conectado – Manual de Sobrevivência</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governo Integrado: Como Construí-lo?</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governo Data-Driven: transformação orientada por dados em governos</span><div class="enap-course-meta"><span class="enap-course-hours">4h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governança de Dados na Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Capacitação em Governança de Dados</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026 e MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Portal Gov.Br</span><div class="enap-course-meta"><span class="enap-course-hours">15h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Ágil no Contexto do Serviço Público</span><div class="enap-course-meta"><span class="enap-course-hours">15h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Scrum no Contexto do Serviço Público</span><div class="enap-course-meta"><span class="enap-course-hours">15h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Excel Avançado</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Excel Intermediário</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução ao Pensamento de Futuros na Gestão Pública</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 3 -->
+          <div class="enap-block-section" data-cat="dados-ia programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Bloco 3 — Transformação Digital e Inovação
+              </h4>
+              <span class="badge-program">Programas de Formação</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Ágil para Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">175h</span><span class="enap-course-date">07/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inovação e Mudança</span><div class="enap-course-meta"><span class="enap-course-hours">145h</span><span class="enap-course-date">09/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Transformação Digital - Fundamentos</span><div class="enap-course-meta"><span class="enap-course-hours">125h</span><span class="enap-course-date">09/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Transformação do Serviço Público mais Digital, Conectado, Aberto e Transparente</span><div class="enap-course-meta"><span class="enap-course-hours">125h</span><span class="enap-course-date">23/04/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 4 -->
+          <div class="enap-block-section" data-cat="gestao-publica programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                Bloco 4 — Gestão Pública e Políticas Públicas
+              </h4>
+              <span class="badge-program">Programas de Formação</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Políticas Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">95h</span><span class="enap-course-date">08/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Estratégia e Planejamento</span><div class="enap-course-meta"><span class="enap-course-hours">310h</span><span class="enap-course-date">14/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Visão Sistêmica</span><div class="enap-course-meta"><span class="enap-course-hours">331h</span><span class="enap-course-date">16/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Processos Organizacionais</span><div class="enap-course-meta"><span class="enap-course-hours">175h</span><span class="enap-course-date">18/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inova: Gestão e Governança de Estatais</span><div class="enap-course-meta"><span class="enap-course-hours">130h</span><span class="enap-course-date">20/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão para Resultados</span><div class="enap-course-meta"><span class="enap-course-hours">348h</span><span class="enap-course-date">23/04/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 5 -->
+          <div class="enap-block-section" data-cat="gestao-publica">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Bloco 5 — Políticas Públicas e Desenvolvimento (Cursos)
+              </h4>
+              <span class="badge-course">Cursos Temáticos</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão do Conhecimento - Teoria e Práticas</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão do Conhecimento no Setor Público</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Sustentabilidade na Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">28h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Administração Pública e Contexto Institucional Contemporâneo</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Análise Ex Ante de Políticas Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Avaliação Ex-Post de Políticas Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Elaboração de políticas, programas e projetos para o desenvolvimento humano e sustentável</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Desenvolvimento humano no século XXI</span><div class="enap-course-meta"><span class="enap-course-hours">8h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Agenda para o desenvolvimento sustentável: conceitos, mobilização e articulação</span><div class="enap-course-meta"><span class="enap-course-hours">8h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Políticas Públicas e Governo Local</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão participativa nas cidades</span><div class="enap-course-meta"><span class="enap-course-hours">12h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Cidades Inteligentes</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Estruturas de Gestão Pública</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 6 -->
+          <div class="enap-block-section" data-cat="gestao-publica">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Bloco 6 — Orçamento, Finanças e Contratos (Cursos)
+              </h4>
+              <span class="badge-course">Cursos Temáticos</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Orçamento Público</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Orçamentária e Financeira</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Instrumentos de Planejamento: PPA, LDO e LOA</span><div class="enap-course-meta"><span class="enap-course-hours">14h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Modelo Lógico aplicado ao PPA 2024-2027</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Elaboração e Avaliação do PPA: bases conceituais</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Economia do Setor Público</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Fiscalização e Gestão de Contratos de TIC</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Matemática Financeira</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão e Fiscalização de Contratos, sob o enfoque da Lei nº 14.133/21</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Controles Institucional e Social dos Gastos Públicos</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 7 -->
+          <div class="enap-block-section" data-cat="gestao-publica">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Bloco 7 — Projetos, Processos e Inovação (Cursos)
+              </h4>
+              <span class="badge-course">Cursos Práticos</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Inovando na Gestão de Projetos</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gerenciamento de Projetos na Prática</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Gestão de Projetos</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Gestão de Processos</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Análise e Melhoria de Processos</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Fundamentos da transformação digital: mapeamento e automação de processos</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Elaboração de Indicadores de Desempenho Institucional</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Planejamento Estratégico para Organizações Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Design Thinking Aplicado à Educação</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gerenciar Projetos com o Microsoft 365</span><div class="enap-course-meta"><span class="enap-course-hours">4h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão da Estratégia com BSC - Fundamentos</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão estratégica e execução do plano de governo no dia a dia</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Planejamento Governamental</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão da Inovação no Setor Público</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Estratégica e Inovação nas Empresas Estatais</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão para Aceleração de Equipes de Inovação</span><div class="enap-course-meta"><span class="enap-course-hours">35h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Métodos e Ferramentas para Inovação em Políticas Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Design Sprint em Projetos de Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Princípios do Design Thinking e Inovação em Governo</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Uso do Design em Políticas Públicas</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Criatividade e Novas Tecnologias para facilitar o seu dia a dia no trabalho</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 8 -->
+          <div class="enap-block-section" data-cat="governanca pessoas programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                Bloco 8 — Governança, Ética e Pessoas
+              </h4>
+              <span class="badge-program">Programas de Formação</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Combate aos Assédios e Outras Formas de Discriminação</span><div class="enap-course-meta"><span class="enap-course-hours">64h</span><span class="enap-course-date">11/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Ética e Integridade Pública</span><div class="enap-course-meta"><span class="enap-course-hours">82h</span><span class="enap-course-date">20/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Humanizada</span><div class="enap-course-meta"><span class="enap-course-hours">377h</span><span class="enap-course-date">22/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Engajamento de Pessoas e Equipes</span><div class="enap-course-meta"><span class="enap-course-hours">129h</span><span class="enap-course-date">23/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Atendimento ao Cidadão</span><div class="enap-course-meta"><span class="enap-course-hours">125h</span><span class="enap-course-date">25/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Ouvidoria</span><div class="enap-course-meta"><span class="enap-course-hours">220h</span><span class="enap-course-date">25/04/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 9 -->
+          <div class="enap-block-section" data-cat="governanca">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Bloco 9 — Ética, Integridade e Compliance (Cursos)
+              </h4>
+              <span class="badge-course">Certificação ENAP — 2026</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Ética e Serviço Público</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Gestão e Apuração da Ética Pública</span><div class="enap-course-meta"><span class="enap-course-hours">24h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Compliance Anticorrupção em Empresas Estatais</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Assédio Moral: O que saber e fazer</span><div class="enap-course-meta"><span class="enap-course-hours">12h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Prevenção e Enfrentamento do Assédio Sexual e Moral</span><div class="enap-course-meta"><span class="enap-course-hours">6h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Lei nº 8112/90 e suas alterações</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Como implementar a LGPD: bases, mecanismos e processos</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Lei Brasileira de Proteção de Dados Pessoais</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Proteção de Dados Pessoais no Setor Público</span><div class="enap-course-meta"><span class="enap-course-hours">15h</span><span class="enap-course-date">Certificação ENAP — 2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 10 -->
+          <div class="enap-block-section" data-cat="pessoas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                Bloco 10 — Gestão de Pessoas, Liderança e Comunicação (Cursos)
+              </h4>
+              <span class="badge-course">Desenvolvimento Humano</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Pessoas nas Empresas Estatais</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Pessoal - Base da Liderança</span><div class="enap-course-meta"><span class="enap-course-hours">50h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão Estratégica de Pessoas no Setor Público e o Sistema de Carreiras</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão por Competências</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Desenvolvendo Times de Alta Performance</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Liderança e Gestão De Equipes</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Conflitos e Negociação</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inteligência Emocional</span><div class="enap-course-meta"><span class="enap-course-hours">50h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Comunicação não violenta</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Comunicação Pública e Gestão de Relacionamento com Cidadão</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Uso de Mídias Sociais na Comunicação Institucional</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Estratégias de Marketing Digital para a Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Comportamento nas Organizações</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">MAR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Facilitação de Reuniões, Times e Workshops no Ambiente Online</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Linguagem simples aproxima o governo das pessoas. Como usar?</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Habilidades de Resolução de Problemas</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 11 -->
+          <div class="enap-block-section" data-cat="governanca">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                Bloco 11 — Ouvidoria, Transparência e Controle Social (Cursos)
+              </h4>
+              <span class="badge-course">Cidadania & Controle</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Resolução de Conflitos Aplicada ao Contexto das Ouvidorias</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão em Ouvidoria</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Atuação Gerencial das Ouvidorias para Melhoria da Gestão Pública</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Proteção ao Denunciante e Tratamento de Denúncias em Ouvidoria</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Controle Social</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governo Aberto: Transparência e Dados Abertos</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Acesso à Informação</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Serviços públicos e defesa do usuário</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Avaliação da qualidade de serviços como base para gestão e melhoria de serviços públicos</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Pesquisa com usuários: como ouvir cidadãos e empresas para melhorar seus serviços</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governo Aberto</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 12 -->
+          <div class="enap-block-section" data-cat="governanca gestao-publica">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Bloco 12 — Gestão de Riscos e Continuidade (Cursos)
+              </h4>
+              <span class="badge-course">Compliance & Resiliência</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">GIRD+10: Gestão Integrada de Riscos e Desastres</span><div class="enap-course-meta"><span class="enap-course-hours">24h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Elaboração do Plano de Contingência para Riscos de Desastres</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gerenciamento de Continuidade de Negócios na Administração Pública</span><div class="enap-course-meta"><span class="enap-course-hours">25h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Riscos em Processos de Trabalho (segundo o Coso)</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Introdução à Gestão de Riscos</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Riscos em Projetos de Transformação Digital</span><div class="enap-course-meta"><span class="enap-course-hours">10h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Gestão de Crises no Setor Público</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">MAR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 13 -->
+          <div class="enap-block-section" data-cat="gestao-publica programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Bloco 13 — Visão de Futuro e Sociedade
+              </h4>
+              <span class="badge-program">Programas de Formação</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Visão de Futuro</span><div class="enap-course-meta"><span class="enap-course-hours">267h</span><span class="enap-course-date">20/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Governo Inteligente</span><div class="enap-course-meta"><span class="enap-course-hours">365h</span><span class="enap-course-date">16/04/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Movimentos Migratórios e Integração de Migrantes no Brasil</span><div class="enap-course-meta"><span class="enap-course-hours">200h</span><span class="enap-course-date">28/04/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 14 -->
+          <div class="enap-block-section" data-cat="governanca pessoas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#38bdf8" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                Bloco 14 — Migrações, Direitos Humanos e Inclusão (Cursos)
+              </h4>
+              <span class="badge-course">Direitos Fundamentais</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill"><span class="enap-course-info">Uma Introdução às Migrações Internacionais no Brasil Contemporâneo</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Crianças e Adolescentes Migrantes</span><div class="enap-course-meta"><span class="enap-course-hours">40h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">MigraCidades: Aprimorando a Governança Migratória Local</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Migração e Saúde</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Direitos dos Imigrantes e Orientações para o Atendimento</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Proteção Socioassistencial a Migrantes em Situação de Vulnerabilidade ou Violação a Direitos</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Promoção e Defesa dos Direitos das Pessoas LGBTQIA+</span><div class="enap-course-meta"><span class="enap-course-hours">30h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inclusão de gênero na ponta da língua</span><div class="enap-course-meta"><span class="enap-course-hours">8h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Inclusão social e laboral das pessoas com deficiência intelectual ou transtorno do espectro autista</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+              <div class="enap-course-pill"><span class="enap-course-info">Diversidade e inclusão no ambiente de trabalho</span><div class="enap-course-meta"><span class="enap-course-hours">20h</span><span class="enap-course-date">ABR/2026</span></div></div>
+            </div>
+          </div>
+
+          <!-- BLOCO 15 -->
+          <div class="enap-block-section" data-cat="gestao-publica programas">
+            <div class="enap-block-header">
+              <h4>
+                <svg width="20" height="20" fill="none" stroke="#d4af37" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                Bloco 15 — Sistemas e Ferramentas Governamentais
+              </h4>
+              <span class="badge-program">PROGRAMA</span>
+            </div>
+            <div class="enap-courses-list">
+              <div class="enap-course-pill" style="grid-column: 1 / -1;">
+                <span class="enap-course-info">Sistema Eletrônico de Informações - SEI! USAR</span>
+                <div class="enap-course-meta">
+                  <span class="enap-course-hours">20h</span>
+                  <span class="enap-course-date">JUN/2019</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. CONTATO -->
+    <section id="contato" class="section-spacing">
+      <div class="container">
+        <div class="contact-card">
+          <div class="section-eyebrow">Conexão & Parcerias</div>
+          <h2 class="contact-title">Vamos conversar?</h2>
+          <p class="contact-desc">
+            Disponível para consultorias institucionais, palestras, estruturação de governança de dados, conformidade com IA no setor público e mentoria estratégica de gestão.
+          </p>
+
+          <div>
+            <a href="mailto:nadelsoncn@gmail.com" class="contact-email-badge">
+              <svg width="20" height="20" fill="none" stroke="var(--accent-gold)" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+              <span>nadelsoncn@gmail.com</span>
+            </a>
+          </div>
+
+          <div class="social-buttons-grid">
+            <a href="https://wa.me/5521988292915" target="_blank" rel="noopener noreferrer" class="social-btn social-btn-whatsapp" title="Falar no WhatsApp: (21) 98829-2915">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+              </svg>
+              <span>WhatsApp <span class="whatsapp-num">(21) 98829-2915</span></span>
+            </a>
+            <a href="https://www.linkedin.com/in/nadelsoncostanogueira" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+              LinkedIn
+            </a>
+            <a href="https://www.instagram.com/nadelsoncostanogueira" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              Instagram
+            </a>
+            <a href="https://www.facebook.com/nadelsoncostanogueira" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.nadelson.com.br" target="_blank" rel="noopener noreferrer" class="social-btn">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              nadelson.com.br
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Nadelson Costa Nogueira Junior — Consultoria Estratégica. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Botão Flutuante de WhatsApp -->
+  <a href="https://wa.me/5521988292915" 
+     target="_blank" 
+     rel="noopener noreferrer" 
+     class="whatsapp-float" 
+     aria-label="Falar no WhatsApp: (21) 98829-2915"
+     title="Falar no WhatsApp: (21) 98829-2915">
+    <svg viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+    </svg>
+  </a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Menu Mobile
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (mobileBtn && navLinks) {
+        mobileBtn.addEventListener('click', () => {
+          navLinks.classList.toggle('open');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+          });
+        });
+      }
+
+      // Scroll Spy para Navegação Ativa
+      const sections = document.querySelectorAll('main > section');
+      const navItems = document.querySelectorAll('.nav-link');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 140;
+          if (pageYOffset >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('href') === `#${current}`) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // Filtro e Busca nos Blocos da ENAP
+      const searchInput = document.getElementById('certSearch');
+      const filterButtons = document.querySelectorAll('.enap-filter-btn');
+      const blocks = document.querySelectorAll('.enap-block-section');
+
+      let currentCategory = 'all';
+      let currentQuery = '';
+
+      function applyFilterAndSearch() {
+        blocks.forEach(block => {
+          const blockCategory = block.getAttribute('data-cat') || '';
+          const blockText = block.textContent.toLowerCase();
+
+          const matchesCat = (currentCategory === 'all') || blockCategory.includes(currentCategory);
+          const matchesSearch = currentQuery === '' || blockText.includes(currentQuery);
+
+          if (matchesCat && matchesSearch) {
+            block.style.display = 'block';
+          } else {
+            block.style.display = 'none';
+          }
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          currentQuery = e.target.value.trim().toLowerCase();
+          applyFilterAndSearch();
+        });
+      }
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = btn.getAttribute('data-filter');
+          applyFilterAndSearch();
+        });
+      });
+    });
+  </script>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisFmt keeps axis tick labels short (compact notation) so long values
+  // (e.g. full BRL amounts) never clip against the plot edge.
+  function axisFmt(v) {
+    return fmt.num(v, { notation: "compact", maximumFractionDigits: 1 });
+  }
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  function coerceFormat(spec) {
+    if (typeof spec === "function") return spec;
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 12, plotH = H - padT - padB;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 12, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (v / max) * plotH);
+      var x = padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      var tx = svgEl("text", { x: x + bw / 2, y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // line(el, {labels:[], values:[], color?, format?}) — single-series line.
+  function line(el, cfg) {
+    var W = 640, H = 280, padL = 46, padB = 30, padT = 12;
+    var svg = frame(el, W, H);
+    var max = maxOf(cfg.values);
+    var n = cfg.values.length;
+    var plotW = W - padL - 16, plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: padL, y1: gy, x2: W - 16, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axisFmt((max * g) / 4);
+      svg.appendChild(lbl);
+    }
+    var pts = cfg.values.map(function (v, i) {
+      var x = padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1));
+      var y = padT + plotH - (v / max) * plotH;
+      return [x, y];
+    });
+    var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+    svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+    pts.forEach(function (p, i) {
+      var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + f(cfg.values[i]);
+      c.appendChild(t);
+      svg.appendChild(c);
+      var tx = svgEl("text", { x: p[0], y: H - 10, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      tx.textContent = cfg.labels[i];
+      svg.appendChild(tx);
+    });
+  }
+
+  // donut(el, {labels:[], values:[], colors?}) — donut with center total.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    var total = cfg.values.reduce(function (a, b) { return a + b; }, 0) || 1;
+    var palette = cfg.colors || [accent(), "#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4"];
+    var a0 = -Math.PI / 2;
+    cfg.values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = cfg.labels[i] + ": " + fmt.num(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    var center = svgEl("text", { x: cx, y: cy + 5, "text-anchor": "middle", "font-size": 20, "font-weight": 650, fill: "currentColor" });
+    center.textContent = fmt.num(total);
+    svg.appendChild(center);
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+})();
+
+</script>
+</body>
+</html>
